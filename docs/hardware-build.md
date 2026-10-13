@@ -1,66 +1,80 @@
 # Hardware Build
 
-We followed the official TortoiseBot hardware instructions from RigBetel Labs: [Hardware Assembly guide](https://github.com/rigbetellabs/tortoisebot/wiki/2.-Hardware-Assembly). This page covers what we did and what we ran into along the way.
+> **Credit:** the robot is a **TortoiseBot** designed by [RigBetel Labs](https://rigbetellabs.com). We assembled it by following their official [Hardware Assembly guide](https://github.com/rigbetellabs/tortoisebot/wiki/2.-Hardware-Assembly), and the bring-up software and lidar driver are theirs. This page documents how our own build went and how we tested each part.
 
-The full list of parts is in [parts-list.md](../hardware/parts-list.md).
+The full parts breakdown is in [parts-list.md](../hardware/parts-list.md).
 
-## 1. Unboxing and checking parts
+## Build sequence
 
-**What we did:** checked everything in the kit against the parts list.
+| Stage | What we did |
+|---|---|
+| 1. Parts check | Checked the kit against the parts list |
+| 2. Assembly | Built the four chassis layers following the official guide |
+| 3. Raspberry Pi check | Powered the Pi and confirmed it booted properly |
+| 4. Motor test | Ran a test program to confirm both motors respond correctly |
+| 5. Camera integration | Brought up the USB webcam and confirmed the image topic |
+| 6. Lidar integration | Brought up the lidar and checked the scan in RViz2 |
+| 7. Full system run | Ran our code on the robot |
 
-**Photo:** coming soon
+## 1. Parts check
+
+We checked every item in the kit against the parts list before starting.
 
 ## 2. Assembly
 
-**What we did:** assembled the chassis, motors, motor driver, power distribution module and Raspberry Pi following the official guide, layer by layer.
-
-**Photo:** coming soon
+We assembled the robot layer by layer, following RigBetel Labs' guide: motors and base, the electronics layer with the motor driver and power distribution module, the layer for the Raspberry Pi, and finally the sensor layer for the lidar and camera.
 
 ## 3. Raspberry Pi setup and check
 
-**What we did:** the Raspberry Pi 4 came with a pre-flashed SD card. After assembly we powered it on and checked that it booted and worked properly.
+The Raspberry Pi 4 came with a pre-flashed SD card, so no operating system installation was needed. After assembly we powered it on and checked that it booted and stayed on.
 
-**Challenge:** the Pi kept turning on and off. [Full story](challenges.md#12-raspberry-pi-turning-on-and-off)
+**Issue and fix:** the Pi kept turning on and off. We first replaced the motor driver, which changed nothing. Testing the cables with a multimeter showed that a USB cable was faulty, and replacing it fixed the problem. We now test cables with a meter before replacing larger parts.
 
 ## 4. Motor test
 
-**What we did:** ran a motor test program to confirm both motors spin correctly.
+We ran a short test program that drives forward, stops, turns left, turns right and stops, so wrong wiring or a reversed motor shows up immediately.
 
-**Code:** [test/](../test) (coming soon)
+**Code:** [test/motor_test.py](../test/motor_test.py)
 
-**Challenge:** the motors were weak. [Full story](challenges.md#11-motors-not-getting-enough-power)
+Run it with the robot lifted off the ground so the wheels spin freely.
+
+**Issue and fix:** the motors were underpowered. The power supply was not providing enough voltage, and changing to a higher-voltage supply fixed it.
 
 ## 5. Camera integration
 
-**What we did:** plugged the USB webcam into the Pi and started the feed with `cam2image`, then viewed it in RViz2 to confirm it was publishing.
+We plugged the USB webcam into the Pi and started the feed with `cam2image`, then viewed it in RViz2 to confirm it was publishing. Both steps run on the Pi over SSH.
 
 ```bash
 ros2 run image_tools cam2image --ros-args \
   -p width:=320 -p height:=240 \
-  -p frequency:=10.0 \
+  -p frequency:=20.0 \
   -p reliability:=best_effort \
   -p depth:=1
 ```
 
-- `width` and `height`: a small 320x240 image keeps the load on the Pi low.
-- `frequency`: 10 frames per second.
-- `reliability:=best_effort`: drops a frame instead of waiting to resend it, which avoids lag.
-- `depth:=1`: keeps only the latest frame.
+| Setting | Purpose |
+|---|---|
+| `width`, `height` | A small 320x240 image keeps the load on the Pi low |
+| `frequency` | 20 frames per second |
+| `reliability:=best_effort` | Drops a frame instead of waiting to resend it, which avoids lag |
+| `depth:=1` | Keeps only the latest frame |
 
-**Challenge:** the camera was connected but nothing showed up in ROS 2. [Full story](challenges.md#10-getting-the-camera-onto-ros-2) Later it also lagged, which is why the settings above are so low. [Full story](challenges.md#13-camera-lag-and-late-reactions)
+**Issue and fix:** the camera was connected but nothing appeared in ROS 2, because a connected camera does not publish by itself. Starting the `cam2image` node fixed it.
+
+**Issue and fix:** the feed later lagged and the robot reacted late to commands. The Pi was overloaded, so we reduced its work by lowering the camera settings above and running the bring-up in a lighter mode (`slam_only:=True`), which skips the navigation stack.
 
 ## 6. Lidar integration
 
-**What we did:** launched the TortoiseBot bring-up file on the Pi, then adjusted the RViz2 settings until the scan displayed correctly.
+We launched the TortoiseBot bring-up file on the Pi, then adjusted the RViz2 settings until the scan displayed correctly.
 
 ```bash
 ros2 launch tortoisebot_bringup autobringup.launch.py use_sim_time:=False exploration:=True slam_only:=True
 ```
 
-`use_sim_time:=False` means it runs on the real robot, and `slam_only:=True` starts only the sensors and mapping, without the full navigation stack.
+`use_sim_time:=False` runs it on the real robot, and `slam_only:=True` starts only the sensors and mapping, without the full navigation stack.
 
 ## 7. Running our code on the robot
 
-**What we did:** with everything checked, we ran our code on the robot.
+With every part checked, we ran our vision pursuit code. The sensors run on the Raspberry Pi, and our node runs on a laptop on the same network, which receives `/image` and `/scan` and publishes `/cmd_vel`. See [architecture.md](architecture.md) for how the pieces connect.
 
 **Video:** coming soon
