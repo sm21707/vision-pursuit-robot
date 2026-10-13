@@ -32,7 +32,7 @@ The Raspberry Pi 4 came with a pre-flashed SD card, so no operating system insta
 
 ## 4. Motor test
 
-We ran a short test program that drives forward, stops, turns left, turns right and stops, so wrong wiring or a reversed motor shows up immediately.
+We ran a short test program that drives forward, stops, turns left, turns right and stops, so that wrong wiring or a reversed motor shows up immediately.
 
 **Code:** [test/motor_test.py](../test/motor_test.py)
 

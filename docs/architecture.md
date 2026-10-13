@@ -1,5 +1,6 @@
 # Architecture
 
+> **Credit:** this project runs on the [TortoiseBot](https://github.com/rigbetellabs/tortoisebot) by [RigBetel Labs](https://rigbetellabs.com). The robot, its assembly guide and the bring-up software are theirs. This page documents our own build and software on top of it.
 How the robot's software fits together.
 
 ## Overview

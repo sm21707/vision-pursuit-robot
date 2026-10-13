@@ -1,19 +1,41 @@
 # Parts List
 
-This robot is built from the RigBetel Labs TortoiseBot kit. For exact specifications and the official assembly guide, see their [Hardware Assembly guide](https://github.com/rigbetellabs/tortoisebot/wiki/2.-Hardware-Assembly) and their [TortoiseBot repository](https://github.com/rigbetellabs/tortoisebot).
+> **Credit:** the robot is a **TortoiseBot** kit designed by [RigBetel Labs](https://rigbetellabs.com). Full specifications and the official kit checklist are in their [Hardware Assembly guide](https://github.com/rigbetellabs/tortoisebot/wiki/2.-Hardware-Assembly). This page summarizes the parts by subsystem and what each one does in our build.
 
-| Part | Qty | Notes |
+## Drive system
+
+| Component | Qty | Role in our robot |
 |---|---|---|
-| Chassis plates | 4 | Laser-cut acrylic |
-| BO motors | 2 | 60 RPM |
-| Wheels | 2 | 65 mm, plus 1 caster wheel |
-| Motor driver | 1 | L298N dual H-bridge |
-| Power distribution module | 1 | Powers the Pi over USB and the motor driver through its terminals |
-| Li-ion battery | 1 | 11.1 V, 2000 mAh |
-| Raspberry Pi 4 Model B | 1 | 2 GB RAM |
-| SD card | 1 | 16 GB, came pre-flashed |
-| USB webcam | 1 | Used for the color detection |
-| 2D lidar (YDLIDAR) | 1 | With USB cable |
+| BO motors (60 RPM) | 2 | Left and right drive wheels |
+| Wheels and caster | 2 + 1 | Two driven wheels and one free-rolling support |
+| L298N motor driver | 1 | Turns low-power commands from the Pi into motor current |
+
+## Power
+
+| Component | Qty | Role in our robot |
+|---|---|---|
+| Li-ion battery (11.1 V) | 1 | Main power source |
+| Power distribution module | 1 | Supplies the Pi over USB and the motor driver through terminals |
+
+## Computing
+
+| Component | Qty | Role in our robot |
+|---|---|---|
+| Raspberry Pi 4 Model B (2 GB) | 1 | Runs the bring-up, camera and lidar nodes |
+| SD card (16 GB, pre-flashed) | 1 | Holds the operating system and RigBetel Labs' software |
+
+## Sensing
+
+| Component | Qty | Role in our robot |
+|---|---|---|
+| USB webcam | 1 | Provides the images used for target detection |
+| 2D lidar (YDLIDAR) | 1 | Measures the distance to obstacles around the robot |
 | Lidar data converter box | 1 | Connects the lidar to the Pi over USB |
 
-Also in the kit: jumper wires, spacers, nuts and bolts, and a screwdriver.
+## Structure
+
+| Component | Qty | Role in our robot |
+|---|---|---|
+| Laser-cut chassis plates | 4 | Four layers: base, electronics, Pi, and sensors |
+| Spacers, fasteners, jumper wires | n/a | Holding the layers together and wiring the motor driver to the Pi |
+
