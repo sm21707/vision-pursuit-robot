@@ -1,10 +1,8 @@
 # Vision Pursuit Robot
 
-![ROS 2 Humble](https://img.shields.io/badge/ROS_2-Humble-blue) ![Ubuntu 22.04](https://img.shields.io/badge/Ubuntu-22.04-orange) ![Python 3](https://img.shields.io/badge/Python-3-green) ![OpenCV](https://img.shields.io/badge/OpenCV-vision-red) ![License MIT](https://img.shields.io/badge/License-MIT-lightgrey)
+![ROS 2 Humble](https://img.shields.io/badge/ROS_2-Humble-blue) ![Ubuntu 22.04](https://img.shields.io/badge/Ubuntu-22.04-orange) ![Python 3](https://img.shields.io/badge/Python-3-green) ![OpenCV](https://img.shields.io/badge/OpenCV-vision-red)
 
-> An autonomous ROS 2 mobile robot that locates a colored target with a camera, pursues it, avoids obstacles using a lidar, and stops when it arrives. Built on the **TortoiseBot** platform by **RigBetel Labs**.
-
-**Platform credit:** the robot used in this project, the TortoiseBot, is designed and open-sourced by [RigBetel Labs](https://github.com/rigbetellabs/tortoisebot). The chassis design, assembly guide, robot bring-up software and lidar driver are theirs. Our work is the perception, decision-making and control software that runs on top of it. See [Acknowledgements](#acknowledgements).
+> An autonomous ROS 2 mobile robot that locates a colored target with a camera, pursues it, avoids obstacles using a lidar, and stops when it arrives. Built on the **TortoiseBot** platform.
 
 ## Contents
 
@@ -14,14 +12,12 @@
 - [Toolkit](#toolkit)
 - [Getting started](#getting-started)
 - [Usage](#usage)
-- [Weekly progress](#weekly-progress)
 - [What we learned](#what-we-learned)
 - [Repository structure](#repository-structure)
 - [Documentation](#documentation)
 - [Roadmap](#roadmap)
 - [Team](#team)
 - [Acknowledgements](#acknowledgements)
-- [License](#license)
 
 ## Overview
 
@@ -80,7 +76,7 @@ The full parts breakdown is in [hardware/parts-list.md](hardware/parts-list.md).
 **Prerequisites:** Ubuntu 22.04, ROS 2 Humble, and a TortoiseBot or equivalent robot (for the hardware part).
 
 1. Follow the [installation guide](docs/installation.md) to set up ROS 2, Gazebo Ignition, RViz2 and OpenCV.
-2. Assemble the robot using the official [RigBetel Labs assembly guide](https://github.com/rigbetellabs/tortoisebot/wiki/2.-Hardware-Assembly). Our notes are in [docs/hardware-build.md](docs/hardware-build.md).
+2. Assemble the robot using the official [assembly guide](https://github.com/rigbetellabs/tortoisebot/wiki/2.-Hardware-Assembly). Our notes are in [docs/hardware-build.md](docs/hardware-build.md).
 3. Clone this repository:
 
 ```bash
@@ -93,13 +89,13 @@ git clone https://github.com/sm21707/vision-pursuit-robot.git
 
 The robot and the laptop must be on the same network.
 
-1. Connect to the Raspberry Pi over SSH. See the RigBetel Labs setup guide for Wi-Fi configuration and credentials.
+1. Connect to the Raspberry Pi over SSH. See the TortoiseBot setup guide for Wi-Fi configuration and credentials.
 
 ```bash
 ssh tortoisebot@<ROBOT_IP>
 ```
 
-2. On the Pi, start the lidar and robot bring-up (RigBetel Labs software):
+2. On the Pi, start the lidar and robot bring-up:
 
 ```bash
 ros2 launch tortoisebot_bringup autobringup.launch.py use_sim_time:=False exploration:=True slam_only:=True
@@ -121,22 +117,6 @@ ros2 run image_tools cam2image --ros-args \
 
 Gazebo Ignition and RViz2 are used for early testing. See [docs/installation.md](docs/installation.md) for setup. The simulation code is in `src/03_simulation/`.
 
-## Weekly progress
-
-| Week | Focus | Summary |
-|---|---|---|
-| Week 1 | Python OOP | Classes, objects, methods, encapsulation, inheritance and polymorphism |
-| Week 2 | ROS 2 fundamentals | Creating packages and nodes and running them with ROS 2 commands |
-| Week 3 | Topics | Writing publishers and subscribers so nodes can exchange data |
-| Week 4 | Turtlesim motion | Drawing shapes, avoiding the window boundary, going to a goal with PID, and following another turtle |
-| Week 5 | State machines | Structuring behavior as states and transitions in turtlesim |
-| Week 6 | Gazebo and RViz2 | Building simulated worlds and visualizing robot data |
-| Week 7 | Perception in simulation | Writing the color detector and obstacle detector |
-| Week 8 | Vision pursuit FSM | Combining detection and avoidance into one state machine |
-| Week 9 | Hardware build | Assembling the TortoiseBot and checking the Raspberry Pi |
-| Week 10 | Sensor integration | Bringing up the camera, lidar and motors, and testing each one |
-| Week 11 | Deployment | Running the full system on the robot and tuning it |
-
 ## What we learned
 
 - [OpenCV: the techniques we used](docs/opencv.md)
@@ -147,7 +127,6 @@ Gazebo Ignition and RViz2 are used for early testing. See [docs/installation.md]
 ```
 vision-pursuit-robot/
 ├── README.md
-├── LICENSE
 ├── docs/
 │   ├── installation.md       # setting up ROS 2, Gazebo, RViz2, OpenCV
 │   ├── architecture.md       # how the software fits together
@@ -187,15 +166,11 @@ Built by Shreya, Soham and Pranjal.
 
 ## Acknowledgements
 
-This project would not exist without **[RigBetel Labs](https://rigbetellabs.com)** and their open-source **[TortoiseBot](https://github.com/rigbetellabs/tortoisebot)**. In particular:
+This project would not exist without **[RigBetel Labs](https://rigbetellabs.com)** and their open-source **[TortoiseBot](https://github.com/rigbetellabs/tortoisebot)**. The robot used in this project is designed and open-sourced by them. In particular:
 
 - **The robot itself:** the kit, chassis design and electronics layout.
 - **The assembly guide:** we built the robot by following their [Hardware Assembly guide](https://github.com/rigbetellabs/tortoisebot/wiki/2.-Hardware-Assembly).
-- **The software stack:** the bring-up package we use to start the lidar and drive system, and the lidar driver, come from their repository. We did not write them.
+- **The software stack:** the bring-up package we use to start the lidar and drive system, and the lidar driver, come from their repository. We did not write them. Our work is the perception, decision-making and control software that runs on top of it.
 - **The documentation and community:** their wiki and Discord made setup and debugging much easier.
 
 Thank you to RigBetel Labs for making robotics accessible to learners. We also relied on the tutorials listed in [docs/resources.md](docs/resources.md).
-
-## License
-
-The code we wrote is released under the MIT License, see [LICENSE](LICENSE). The TortoiseBot design, firmware and software belong to RigBetel Labs and remain under the terms in [their repository](https://github.com/rigbetellabs/tortoisebot).
